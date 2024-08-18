@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildGameArea(ThemeData theme) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(32.0),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
@@ -81,9 +81,19 @@ class _HomePageState extends State<HomePage> {
             onTap: () => _handleTap(index),
             child: Container(
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainer,
-                border: Border.all(
-                  color: theme.colorScheme.surfaceContainerHighest,
+                border: Border(
+                  top: index >= 3
+                      ? BorderSide(
+                          width: 1,
+                          color: Theme.of(context).dividerColor,
+                        )
+                      : BorderSide.none,
+                  left: index % 3 != 0
+                      ? BorderSide(
+                          width: 1,
+                          color: Theme.of(context).dividerColor,
+                        )
+                      : BorderSide.none,
                 ),
               ),
               child: Center(
@@ -179,7 +189,7 @@ class _HomePageState extends State<HomePage> {
         winCount["o"] = winCount["o"]! + 1;
       }
 
-      _showDialog(winner);
+      _showDialog(winner.toUpperCase());
       _items.fillRange(0, 9, "");
     } else if (!_items.contains("")) {
       _showDialog("Draw");
@@ -194,8 +204,23 @@ class _HomePageState extends State<HomePage> {
         title: Text("Winner: $winner"),
         actions: [
           TextButton(
+            onPressed: () {
+              setState(() {
+                winCount["x"] = 0;
+                winCount["o"] = 0;
+              });
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              "Reset",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+          ),
+          TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text("OK"),
+            child: const Text("Play Again"),
           ),
         ],
       ),
