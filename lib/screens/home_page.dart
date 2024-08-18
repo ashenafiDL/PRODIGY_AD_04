@@ -8,12 +8,67 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Map<String, int> winCount = {"x": 0, "o": 0};
   bool isX = true;
   final List<String> _items = ["", "", "", "", "", "", "", "", ""];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    return Column(
+      children: [
+        Expanded(child: _buildScoreBoard()),
+        Expanded(
+          flex: 3,
+          child: _buildGameArea(theme),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScoreBoard() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Player X",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "${winCount["x"]}",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Player O",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "${winCount["o"]}",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGameArea(ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
@@ -118,6 +173,12 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (winner != null) {
+      if (winner == "x") {
+        winCount["x"] = winCount["x"]! + 1;
+      } else if (winner == "o") {
+        winCount["o"] = winCount["o"]! + 1;
+      }
+
       _showDialog(winner);
       _items.fillRange(0, 9, "");
     } else if (!_items.contains("")) {

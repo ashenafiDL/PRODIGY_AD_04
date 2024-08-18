@@ -13,9 +13,12 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         colorSchemeSeed: const Color(0xff6750a4),
+        useMaterial3: false,
       ),
       home: const Scaffold(
-        body: HomePage(),
+        body: SafeArea(
+          child: HomePage(),
+        ),
       ),
     );
   }
